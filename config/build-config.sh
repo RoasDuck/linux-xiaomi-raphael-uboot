@@ -68,7 +68,7 @@ get_packages() {
   local system_type="$1"
   local desktop_env="$2"
   
-  base_packages="bash-completion sudo apt-utils ssh openssh-server nano network-manager systemd-boot initramfs-tools chrony curl wget locales tzdata dnsmasq nftables iproute2"
+  base_packages="bash-completion sudo apt-utils ssh openssh-server nano network-manager initramfs-tools chrony curl wget locales tzdata dnsmasq nftables iproute2"
   
   if [[ "$system_type" == *"debian-"* ]]; then
     base_packages="$base_packages fonts-wqy-microhei"
