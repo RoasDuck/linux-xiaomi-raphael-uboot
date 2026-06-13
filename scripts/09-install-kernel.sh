@@ -20,6 +20,30 @@ chroot rootdir dpkg -i /tmp/firmware-xiaomi-raphael.deb
 
 rm rootdir/tmp/*-xiaomi-raphael.deb
 
+echo "[$(date +'%Y-%m-%d %H:%M:%S')] [09]   └─ 创建自定义 initramfs firmware hook..."
+cat > rootdir/etc/initramfs-tools/hooks/firmware-gpu << 'EOF'
+#!/bin/sh
+PREREQ=""
+prereqs()
+{
+    echo "$PREREQ"
+}
+case $1 in
+    prereqs)
+        prereqs
+        exit 0
+        ;;
+esac
+
+. /usr/share/initramfs-tools/hook-functions
+
+mkdir -p ${DESTDIR}/lib/firmware/qcom/sm8150/Xiaomi/raphael
+cp /lib/firmware/qcom/a630_sqe.fw ${DESTDIR}/lib/firmware/qcom/
+cp /lib/firmware/qcom/a640_gmu.bin ${DESTDIR}/lib/firmware/qcom/
+cp /lib/firmware/qcom/sm8150/Xiaomi/raphael/a640_zap.mbn ${DESTDIR}/lib/firmware/qcom/sm8150/Xiaomi/raphael/
+EOF
+chmod +x rootdir/etc/initramfs-tools/hooks/firmware-gpu
+
 echo "[$(date +'%Y-%m-%d %H:%M:%S')] [09]   └─ 更新 initramfs..."
 chroot rootdir update-initramfs -c -k all
 
