@@ -2,16 +2,16 @@
 set -e
 
 if [ "$DESKTOP_ENV" != "gnome" ]; then
-	echo "[$(date +'%Y-%m-%d %H:%M:%S')] [14] ⏭️  非 GNOME 桌面，跳过电源键配置"
+	echo "[$(date +'%Y-%m-%d %H:%M:%S')] ⏭️  非 GNOME 桌面，跳过电源键配置"
 	exit 0
 fi
 
 # 默认用户名，构建时由 USER_NAME 环境变量覆盖
 POWER_KEY_USER="${USER_NAME:-user}"
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [14] 🔘 配置电源键（用户: ${POWER_KEY_USER}，短按息屏/亮屏 / 长按1s关机菜单）"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')] 🔘 配置电源键（用户: ${POWER_KEY_USER}，短按息屏/亮屏 / 长按1s关机菜单）"
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [14]   └─ 禁用 systemd 电源键行为"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 禁用 systemd 电源键行为"
 install -d rootdir/etc/systemd/logind.conf.d
 cat > rootdir/etc/systemd/logind.conf.d/power-key.conf << 'EOF'
 [Login]
@@ -20,7 +20,7 @@ HandlePowerKeyLongPress=ignore
 PowerKeyIgnoreInhibited=yes
 EOF
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [14]   └─ 安装电源键守护进程"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 安装电源键守护进程"
 install -d rootdir/usr/local/sbin
 cat > rootdir/usr/local/sbin/power-key-handler.py << 'PYEOF'
 #!/usr/bin/env python3
@@ -249,7 +249,7 @@ if __name__ == "__main__":
 PYEOF
 chmod 755 rootdir/usr/local/sbin/power-key-handler.py
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [14]   └─ 创建并启用 systemd 用户服务"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 创建并启用 systemd 用户服务"
 install -d rootdir/etc/systemd/user
 cat > rootdir/etc/systemd/user/power-key-handler.service << EOF
 [Unit]
@@ -269,11 +269,11 @@ WantedBy=graphical-session.target
 EOF
 install -d rootdir/etc/systemd/user/graphical-session.target.wants
 ln -sf /etc/systemd/user/power-key-handler.service rootdir/etc/systemd/user/graphical-session.target.wants/power-key-handler.service
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [14]   └─ 启用用户 lingering（确保用户服务开机自启）"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 启用用户 lingering（确保用户服务开机自启）"
 install -d rootdir/var/lib/systemd/linger
 touch rootdir/var/lib/systemd/linger/"${POWER_KEY_USER}"
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [14]   └─ 禁用 GNOME 自带电源键处理"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 禁用 GNOME 自带电源键处理"
 install -d rootdir/etc/dconf/db/local.d rootdir/etc/dconf/profile
 cat > rootdir/etc/dconf/db/local.d/01-power-key << 'EOF'
 [org/gnome/settings-daemon/plugins/power]
@@ -287,9 +287,9 @@ EOF
 fi
 chroot rootdir dconf update 2>/dev/null || true
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [14]   └─ 添加 udev 规则确保电源键可读"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 添加 udev 规则确保电源键可读"
 cat > rootdir/etc/udev/rules.d/99-power-key.rules << 'EOF'
 ACTION=="add", SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="pm8941_pwrkey", MODE="0666"
 EOF
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [14] ✅ 电源键配置完成"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')] ✅ 电源键配置完成"

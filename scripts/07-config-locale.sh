@@ -1,20 +1,15 @@
 #!/bin/bash
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-CONFIG_DIR="$SCRIPT_DIR/../config"
-
-. "$CONFIG_DIR/build-config.sh"
-
 SYSTEM_TYPE="${SYSTEM_TYPE:-ubuntu-server}"
 DESKTOP_ENV="${DESKTOP_ENV:-}"
 DEBIAN_VERSION="${DEBIAN_VERSION:-trixie}"
 UBUNTU_VERSION="${UBUNTU_VERSION:-resolute}"
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [07] 🌍 配置时区和语言"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')] 🌍 配置时区和语言"
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [07]   └─ 时区: ${TIMEZONE}"
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [07]   └─ 默认语言: ${LANG_DEFAULT}"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 时区: ${TIMEZONE}"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 默认语言: ${LANG_DEFAULT}"
 
 # 设置时区和语言
 echo "Asia/Shanghai" > rootdir/etc/timezone
@@ -22,7 +17,7 @@ chroot rootdir ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 # 安装中文语言包
 if [[ "$SYSTEM_TYPE" == *"ubuntu-"* ]]; then
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] [07]   └─ 安装 Ubuntu 中文语言包"
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 安装 Ubuntu 中文语言包"
     chroot rootdir apt-get update
     
     if [[ "$SYSTEM_TYPE" == *"server"* ]]; then
@@ -43,7 +38,7 @@ if [[ "$SYSTEM_TYPE" == *"ubuntu-"* ]]; then
         chroot rootdir apt-get install -y $BASE_ZH_PACKAGES $DESKTOP_ZH_PACKAGES
     fi
 elif [[ "$SYSTEM_TYPE" == *"debian-"* ]]; then
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] [07]   └─ 安装 Debian 中文语言包"
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 安装 Debian 中文语言包"
     chroot rootdir apt-get update
     chroot rootdir apt-get install -y locales locales-all tzdata
 fi
@@ -67,4 +62,4 @@ fi
 EOF
 chmod +x rootdir/etc/profile.d/99-locale-fix.sh
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [07] ✅ 时区语言配置完成"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')] ✅ 时区语言配置完成"

@@ -1,10 +1,7 @@
 #!/bin/bash
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-CONFIG_DIR="$SCRIPT_DIR/../config"
-
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [08] 🖥️ 添加屏幕管理命令"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')] 🖥️ 添加屏幕管理命令"
 
 # 添加屏幕管理命令到全局bash配置
 cat >> rootdir/etc/bash.bashrc << 'EOF'
@@ -28,7 +25,7 @@ jinfan() {
 }
 EOF
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [08]   └─ 屏幕管理命令已添加"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 屏幕管理命令已添加"
 
 # 配置开机 15 秒后自动熄屏的 Systemd 服务
 cat > rootdir/etc/systemd/system/blank_screen.service << 'EOF'
@@ -50,4 +47,4 @@ EOF
 
 chroot rootdir systemctl enable blank_screen.service
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] [08]   └─ 自动熄屏服务已启用"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ 自动熄屏服务已启用"
