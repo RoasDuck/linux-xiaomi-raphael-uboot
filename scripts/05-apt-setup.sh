@@ -15,6 +15,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ $UBUNTU_VERSION-updates main restricte
 deb http://ports.ubuntu.com/ubuntu-ports/ $UBUNTU_VERSION-backports main restricted universe multiverse
 deb http://ports.ubuntu.com/ubuntu-ports/ $UBUNTU_VERSION-security main restricted universe multiverse
 EOF
+    chroot rootdir apt modernize-sources -y
 else
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] [05]   └─ 配置 Debian $DEBIAN_VERSION 源"
     cat > rootdir/etc/apt/sources.list << EOF
