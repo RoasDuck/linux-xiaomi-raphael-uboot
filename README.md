@@ -60,7 +60,7 @@
 |:---:|:---|:---:|
 | 构建模式 | `parallel` 并行构建 / `single` 单独构建 | `parallel` |
 | 系统类型 | 支持逗号分隔，留空则全量构建 | 全部 |
-| 内核版本 | `6.18` 或 `7.0` | `7.0` |
+| 内核版本 | 跟随 [Aospa-raphael-unofficial/linux](https://github.com/Aospa-raphael-unofficial/linux) 上游更新 | `7.1` |
 | 构建工具 | `mmdebstrap` / `debootstrap` | `mmdebstrap` |
 | Phosh 变体 | 仅 Phosh 镜像生效 | `phosh-core` |
 
